@@ -17,42 +17,44 @@ using CsvHelper;
 namespace AdvanceSteelCSV
 {
     class CSVFile
-    {
-        List<CSVField> csvFields;
-
-        List<CSVField> masterTable;
+    {        
         Document doc;
         Database db;
         Editor ed;
 
+        string path;
+
         public CSVFile()
         {
-            string path = getPath();
-
-            this.masterTable = getMasterTable();
-
-            this.csvFields = getValidRecords(path);
-
             this.doc = Application.DocumentManager.MdiActiveDocument;
-            this.db = doc.Database;          
+            this.db = doc.Database;
             this.ed = doc.Editor;
+
+            this.path = getPath();
+
+            // this.masterTable = getMasterTable();            
         }
 
-        private List<CSVField> getMasterTable()
+        //private List<CSVField> getMasterTable()
+        //{
+        //    List<CSVField> fields = new List<CSVField>();
+
+        //    string[] resourceNames =  System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames();
+
+        //    using (var reader = new StreamReader(resourceNames.Where(name => name == "MasterSectionTable.csv").First()))
+        //    {
+        //        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+        //        {
+        //            fields = csv.GetRecords<CSVField>().ToList();
+        //        }
+
+        //        return fields;
+        //    }            
+        //}
+
+        public List<CSVField> GetValidRecords()
         {
-            List<CSVField> fields = new List<CSVField>();
-
-            string[] resourceNames =  System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames();
-
-            using (var reader = new StreamReader(resourceNames.Where(name => name == "MasterSectionTable.csv").First()))
-            {
-                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-                {
-                    fields = csv.GetRecords<CSVField>().ToList();
-                }
-
-                return fields;
-            }            
+            return getValidRecords(this.path);
         }
 
         private List<CSVField> getValidRecords(string path)

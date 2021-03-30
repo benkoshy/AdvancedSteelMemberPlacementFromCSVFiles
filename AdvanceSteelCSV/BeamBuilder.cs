@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Autodesk.AdvanceSteel.Modelling;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
@@ -30,19 +30,46 @@ namespace AdvanceSteelCSV
 
         public void BuildBeam()
         {
-            // get lines from selection
-            // separate by layer
-            // use the CSV to build the beam
             List<ObjectId> objectIds = getLineIds();
 
+            using (Transaction tr = db.TransactionManager.StartTransaction())
+            {
+                List<Line> lines = objectIds.Select(id => id.GetObject(OpenMode.ForRead) as Line).ToList();
 
+                Autodesk.AdvanceSteel.DocumentManagement.DocumentManager.LockCurrentDocument();
+                using (Autodesk.AdvanceSteel.CADAccess.Transaction steelTr = Autodesk.AdvanceSteel.CADAccess.TransactionManager.StartTransaction())
+                {
+                    foreach (Line line in lines)
+                    {
+                        if (fields.Any(row => row.Layer == line.Layer))
+                        {
+                            CSVField row = fields.First(r => r.Layer == line.Layer);
+
+                            createBeam(row, line);
+                        }
+                    }
+
+                    steelTr.Commit();
+                }
+                Autodesk.AdvanceSteel.DocumentManagement.DocumentManager.UnlockCurrentDocument();
+
+                tr.Commit();
+            }
+        }
+
+        private void createBeam(CSVField row, Line line)
+        {
+            Autodesk.AdvanceSteel.Geometry.Point3d startPoint = new Autodesk.AdvanceSteel.Geometry.Point3d(line.StartPoint.X, line.StartPoint.Y, line.StartPoint.Z);
+            Autodesk.AdvanceSteel.Geometry.Point3d endPoint = new Autodesk.AdvanceSteel.Geometry.Point3d(line.EndPoint.X, line.EndPoint.Y, line.EndPoint.Z);
+
+            string beamFormat = String.Format("{0}#@§@#{1}", row.Table, row.Section);
+            StraightBeam myBeam = new StraightBeam(beamFormat, startPoint, endPoint, Autodesk.AdvanceSteel.Geometry.Vector3d.kXAxis);
+            myBeam.WriteToDb();
         }
 
         private List<ObjectId> getLineIds()
         {
-            TypedValue[] filterlist = new TypedValue[1];
-
-            //select circle and line
+            TypedValue[] filterlist = new TypedValue[1];            
 
             filterlist[0] = new TypedValue(0, "LINE");            
 
@@ -53,7 +80,6 @@ namespace AdvanceSteelCSV
 
                 ed.WriteMessage("\nerror in getting the selectAll");
                 return new List<ObjectId>();
-
             }
 
             return selRes.Value.GetObjectIds().ToList();

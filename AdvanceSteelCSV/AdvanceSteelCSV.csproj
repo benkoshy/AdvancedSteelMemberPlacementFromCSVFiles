@@ -34,9 +34,11 @@
   <ItemGroup>
     <Reference Include="AcCoreMgd">
       <HintPath>C:\Autodesk\ObjectARX_for_AutoCAD_2020_Win_64_bit\inc\AcCoreMgd.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="AcDbMgd">
       <HintPath>C:\ObjectARX 2015\inc\AcDbMgd.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="AcMgd">
       <HintPath>C:\Autodesk\ObjectARX_for_AutoCAD_2020_Win_64_bit\inc\AcMgd.dll</HintPath>
