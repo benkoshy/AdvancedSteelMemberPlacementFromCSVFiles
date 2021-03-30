@@ -50,7 +50,15 @@ namespace AdvanceSteelCSV
             }
 
             DocumentManager.UnlockCurrentDocument();
+        }
 
+
+        [CommandMethodAttribute("ConvertToBeams", "ConvertToBeams", "ConvertToBeams", CommandFlags.Modal)]
+        public void ConvertToBeams()
+        {
+            CSVFile file = new CSVFile();    
+
+            
         }
     }
 }
