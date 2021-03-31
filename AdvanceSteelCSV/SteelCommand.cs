@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AdvanceSteelCSV
 {
@@ -17,10 +18,18 @@ namespace AdvanceSteelCSV
         [CommandMethodAttribute("ConvertToBeams", "ConvertToBeams", "ConvertToBeams", CommandFlags.Modal)]
         public void ConvertToBeams()
         {
-            CSVFile file = new CSVFile();
+            try
+            {
+                CSVFile file = new CSVFile();
 
-            BeamBuilder builder = new BeamBuilder(file.GetValidRecords());
-            builder.BuildBeam();
+                BeamBuilder builder = new BeamBuilder(file.GetValidRecords());
+                builder.BuildBeam();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
         }
     }
 }
