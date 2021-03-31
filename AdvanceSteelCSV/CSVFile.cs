@@ -68,7 +68,7 @@ namespace AdvanceSteelCSV
                 List<CSVField> invalidLayerNames = allRecords.Where(row => ! layerTable.Has(row.Layer)).ToList();
                 if (invalidLayerNames.Count > 0)
                 {
-                    ed.WriteMessage(String.Format("\n The following layernames in the CSV file {0} were invalid: {1}", path,  String.Join(", ", invalidLayerNames)));
+                    ed.WriteMessage(String.Format("\n The following layernames in the CSV file {0} were invalid: {1}", path, invalidLayerNames.Aggregate((a, b) => a.ToString() + ", " + b.ToString())));
                 }
 
                 return allRecords.Where(row => layerTable.Has(row.Layer)).ToList();
