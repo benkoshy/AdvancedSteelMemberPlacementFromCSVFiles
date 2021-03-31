@@ -63,6 +63,7 @@ namespace AdvanceSteelCSV
             Autodesk.AdvanceSteel.Geometry.Point3d endPoint = new Autodesk.AdvanceSteel.Geometry.Point3d(line.EndPoint.X, line.EndPoint.Y, line.EndPoint.Z);
 
             string beamFormat = String.Format("{0}#@§@#{1}", row.Table, row.Section);
+            // string beamFormat = "AS-NZS SHS - CF C350#@§@#SHS 100x100x3.0";
             StraightBeam myBeam = new StraightBeam(beamFormat, startPoint, endPoint, Autodesk.AdvanceSteel.Geometry.Vector3d.kXAxis);
             myBeam.WriteToDb();
         }
