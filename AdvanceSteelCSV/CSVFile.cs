@@ -87,6 +87,7 @@ namespace AdvanceSteelCSV
                 fileDialog.Filter = "All Files (*.*)|*.*";
                 fileDialog.FilterIndex = 1;
                 fileDialog.Multiselect = false;
+                fileDialog.Title = "\n Please select the .csv file - and ensure it is named correctly otherwise it will not work!";
 
                 if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
