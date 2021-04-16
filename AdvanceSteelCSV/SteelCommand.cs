@@ -15,7 +15,7 @@ namespace AdvanceSteelCSV
 {
     class SteelCommand
     {        
-        [CommandMethodAttribute("ConvertToBeams", "ConvertToBeams", "ConvertToBeams", CommandFlags.Modal)]
+        [CommandMethodAttribute("CTB", "CTB", "CTB", CommandFlags.Modal)]
         public void ConvertToBeams()
         {
             try
