@@ -26,6 +26,8 @@ namespace AdvanceSteelCSV
             this.doc = Application.DocumentManager.MdiActiveDocument;
             this.db = doc.Database;
             this.ed = doc.Editor;
+
+            ed.WriteMessage("\n Written by Ben Koshy");
         }
 
         public void BuildBeam()
@@ -75,10 +77,13 @@ namespace AdvanceSteelCSV
             filterlist[0] = new TypedValue(0, "LINE");            
 
             SelectionFilter filter = new SelectionFilter(filterlist);
-            PromptSelectionResult selRes = ed.SelectAll(filter);
+
+            PromptSelectionOptions pso = new PromptSelectionOptions();
+            pso.MessageForAdding = "\n Please select lines only to convert to beams";            
+
+            PromptSelectionResult selRes = ed.GetSelection(pso, filter);
             if (selRes.Status != PromptStatus.OK)
             {
-
                 ed.WriteMessage("\nerror in getting the selectAll");
                 return new List<ObjectId>();
             }
